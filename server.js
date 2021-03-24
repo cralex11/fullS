@@ -1,24 +1,23 @@
 import express from 'express'
 import mongoose from "mongoose";
-
-// require('dotenv').config();
+import bodyParse from 'body-parser'
 
 const app = express();
-const router = express.Router()
+
+
+// routes
+import postsRouter from './routes/posts.js'
+
+//middleware
+app.use(bodyParse.json())
+//user middleware
+app.use('/posts', postsRouter);
+
 
 //CONNECT TO DB
-mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true}, () => {
+mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true}, () => {
     console.log('connected to db')
 })
-
-app.use(router)
-router.route('/')
-    .get((req, res) => {
-        res.send("get")
-    })
-    .post(((req, res) => {
-        res.send('post')
-    }))
 
 
 export const start = () => {
